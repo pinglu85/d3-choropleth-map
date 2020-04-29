@@ -40,7 +40,6 @@ Promise.all(promises)
       )
       .range(d3.schemeGreens[9]);
 
-    console.log(d3.range(2.6, 75.1, (75.1 - 2.6) / 8));
     // Legend X Scale
     const legendXScale = d3
       .scaleLinear()
@@ -86,6 +85,15 @@ Promise.all(promises)
 
     legend.select('.domain').remove(); // Remove axis line
 
+    // Tooltip
+    const tip = d3
+      .tip()
+      .attr('id', 'tooltip')
+      .offset([0, 0])
+      .html((d) => d);
+
+    svg.call(tip);
+
     // U.S. counties
     svg
       .append('g')
@@ -93,11 +101,27 @@ Promise.all(promises)
       .data(topojson.feature(us, us.objects.counties).features)
       .join('path')
       .attr('fill', (d) => {
-        const fips = d.id;
-        const eduEl = educationData.find((el) => el.fips === fips);
-        return legendThreshold(eduEl.bachelorsOrHigher);
+        const eduLevel = educationData.find((el) => el.fips === d.id)
+          .bachelorsOrHigher;
+        return legendThreshold(eduLevel);
       })
-      .attr('d', path);
+      .attr('d', path)
+      .attr('class', 'county')
+      .attr(
+        'data-fips',
+        (d) => educationData.find((el) => el.fips === d.id).fips
+      )
+      .attr(
+        'data-education',
+        (d) => educationData.find((el) => el.fips === d.id).bachelorsOrHigher
+      )
+      .on('mouseover', (d, i, n) => {
+        const eduEl = educationData.find((el) => el.fips === d.id);
+        const html = `${eduEl.area_name}, ${eduEl.state}: ${eduEl.bachelorsOrHigher}%`;
+        tip.attr('data-education', eduEl.bachelorsOrHigher);
+        tip.show(html, n[i]);
+      })
+      .on('mouseout', tip.hide);
 
     // U.S. states borders
     svg

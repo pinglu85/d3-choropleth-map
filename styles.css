@@ -1,7 +1,7 @@
   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
 
   :root {
-    --yellow: rgb(238, 205, 155);
+    --yellow: rgb(247, 245, 149);
   }
 
   * {
@@ -40,26 +40,12 @@
 
   #tooltip {
     background-color: var(--yellow);
-    border-radius: 8px;
+    border-radius: 4px;
     border: 0;
     padding: 12px;
     text-align: center;
     font-size: 14px;
     min-width: 180px;
-    box-shadow: 0px 4px 8px 3px rgba(109, 109, 109, 0.8);
+    box-shadow: 0px 4px 7px 3px rgba(91, 105, 86, 0.8);
     pointer-events: none;
-  }
-
-  #tooltip:after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 0;
-    height: 0;
-    border-top: solid 10px var(--yellow);
-    border-left: solid 10px transparent;
-    border-right: solid 10px transparent;
   }
